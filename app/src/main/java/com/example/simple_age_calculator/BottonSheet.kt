@@ -26,6 +26,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,6 +49,9 @@ import com.example.simple_age_calculator.ui.theme.TextFieldColor
 import com.example.simple_age_calculator.ui.theme.playFairFamily
 import com.example.simple_age_calculator.ui.theme.poppins
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,9 +65,14 @@ fun BottomSheet() {
     var datePickerState = rememberDatePickerState(
     )
     var todayDatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = Instant.now().toEpochMilli()
+        //initialSelectedDateMillis = Instant.now().toEpochMilli()
     )
-
+    var datePlaceHolder by remember {
+        mutableStateOf("DD - MM - YYYY")
+    }
+    var todayDatePlaceHolder by remember {
+        mutableStateOf("DD - MM - YYYY")
+    }
     Column(
         Modifier
             .fillMaxSize()
@@ -96,7 +105,9 @@ fun BottomSheet() {
                 .background(TextFieldColor)
                 .height(50.dp)
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
-                .clickable { isDatePickerOpen = true},
+                .clickable {
+                    isDatePickerOpen = true
+                },
         ) {
             Row(
                 modifier = Modifier
@@ -106,13 +117,13 @@ fun BottomSheet() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "23 - 08 - 2000",
+                    text = datePlaceHolder,
                     fontFamily = poppins,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
                     color = Color.Gray,
                 )
-                IconButton(onClick = { isDatePickerOpen = true}) {
+                IconButton(onClick = { isDatePickerOpen = true }) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
@@ -140,7 +151,7 @@ fun BottomSheet() {
                 .background(TextFieldColor)
                 .height(50.dp)
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
-                .clickable { isTodayDatePickerOpen = true},
+                .clickable { isTodayDatePickerOpen = true },
         ) {
             Row(
                 modifier = Modifier
@@ -150,13 +161,13 @@ fun BottomSheet() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "DD - MM - YYYY",
+                    text = todayDatePlaceHolder,
                     fontFamily = poppins,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
                     color = Color.Gray,
                 )
-                IconButton(onClick = { isTodayDatePickerOpen = true}) {
+                IconButton(onClick = { isTodayDatePickerOpen = true }) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
@@ -206,7 +217,10 @@ fun BottomSheet() {
         //------- RESET BUTTON
         Spacer(modifier = Modifier.height(10.dp))
         Button(
-            onClick = { },
+            onClick = {
+                datePlaceHolder = "DD - MM - YYYY"
+                todayDatePlaceHolder = "DD - MM - YYYY"
+            },
             modifier = Modifier
                 // .height(60.dp)
                 //.width(220.dp)
@@ -243,16 +257,34 @@ fun BottomSheet() {
     SelectDate(
         state = datePickerState,
         isOpen = isDatePickerOpen,
-        onDismiss = { isDatePickerOpen = false},
-        onConfirm = {isDatePickerOpen = false}
+        onDismiss = { isDatePickerOpen = false },
+        onConfirm = {
+            isDatePickerOpen = false
+            datePlaceHolder = datePickerState.selectedDateMillis.changeMillisToDateString()
+        }
     )
     SelectDate(
         state = todayDatePickerState,
-    isOpen = isTodayDatePickerOpen,
-    onDismiss = { isTodayDatePickerOpen = false},
-    onConfirm = {isTodayDatePickerOpen = false}
+        isOpen = isTodayDatePickerOpen,
+        onDismiss = { isTodayDatePickerOpen = false },
+        onConfirm = {
+            isTodayDatePickerOpen = false
+            todayDatePlaceHolder = datePickerState.selectedDateMillis.changeMillisToDateString()
+        }
     )
 }
+
+//Extension function for to convert milli to String
+fun Long?.changeMillisToDateString(): String {
+    val date: LocalDate = this?.let {
+        Instant
+            .ofEpochMilli(it)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+    } ?: LocalDate.now()
+    return date.format(DateTimeFormatter.ofPattern("dd - MM - yyyy"))
+}
+
 
 @Preview(showBackground = true)
 @Composable
