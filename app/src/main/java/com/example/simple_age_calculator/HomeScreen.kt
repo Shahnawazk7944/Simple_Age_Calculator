@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
+import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.PinkDark
 import com.example.simple_age_calculator.ui.theme.YellowMist
 import com.example.simple_age_calculator.ui.theme.playFairFamily
@@ -89,8 +91,9 @@ fun HomeScreen() {
                 onDismissRequest = {
                     showBottomSheet = false
                 },
-                Modifier.heightIn(min = 500.dp, max = 500.dp),
-                containerColor = YellowMist,
+                Modifier
+                    .heightIn(min = 500.dp, max = 600.dp),
+                containerColor = BottomSheetColor,
 
                 sheetState = sheetState
             ) {
