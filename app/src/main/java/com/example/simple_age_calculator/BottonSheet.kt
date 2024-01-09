@@ -16,11 +16,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,9 +47,23 @@ import com.example.simple_age_calculator.ui.theme.ResetButton
 import com.example.simple_age_calculator.ui.theme.TextFieldColor
 import com.example.simple_age_calculator.ui.theme.playFairFamily
 import com.example.simple_age_calculator.ui.theme.poppins
+import java.time.Instant
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet() {
+    var isDatePickerOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isTodayDatePickerOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var datePickerState = rememberDatePickerState(
+    )
+    var todayDatePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = Instant.now().toEpochMilli()
+    )
+
     Column(
         Modifier
             .fillMaxSize()
@@ -75,7 +96,7 @@ fun BottomSheet() {
                 .background(TextFieldColor)
                 .height(50.dp)
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
-                .clickable { },
+                .clickable { isDatePickerOpen = true},
         ) {
             Row(
                 modifier = Modifier
@@ -91,7 +112,7 @@ fun BottomSheet() {
                     fontSize = 16.sp,
                     color = Color.Gray,
                 )
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { isDatePickerOpen = true}) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
@@ -119,7 +140,7 @@ fun BottomSheet() {
                 .background(TextFieldColor)
                 .height(50.dp)
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
-                .clickable { },
+                .clickable { isTodayDatePickerOpen = true},
         ) {
             Row(
                 modifier = Modifier
@@ -135,7 +156,7 @@ fun BottomSheet() {
                     fontSize = 16.sp,
                     color = Color.Gray,
                 )
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { isTodayDatePickerOpen = true}) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
@@ -217,8 +238,20 @@ fun BottomSheet() {
         }
 
 
-      //  Spacer(modifier = Modifier.height(40.dp))
+        //  Spacer(modifier = Modifier.height(40.dp))
     }
+    SelectDate(
+        state = datePickerState,
+        isOpen = isDatePickerOpen,
+        onDismiss = { isDatePickerOpen = false},
+        onConfirm = {isDatePickerOpen = false}
+    )
+    SelectDate(
+        state = todayDatePickerState,
+    isOpen = isTodayDatePickerOpen,
+    onDismiss = { isTodayDatePickerOpen = false},
+    onConfirm = {isTodayDatePickerOpen = false}
+    )
 }
 
 @Preview(showBackground = true)
