@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -28,10 +25,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.PinkDark
+import com.example.simple_age_calculator.ui.theme.YellowMist
 import com.example.simple_age_calculator.ui.theme.playFairFamily
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,31 +77,28 @@ fun HomeScreen() {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 70.dp)
         ) {
-                Image(painter = painterResource(id = R.drawable.next2),
-                    contentDescription = "next",
-                    Modifier.size(60.dp).clickable { showBottomSheet = true }
-                )
+            Image(painter = painterResource(id = R.drawable.next2),
+                contentDescription = "next",
+                Modifier
+                    .size(60.dp)
+                    .clickable { showBottomSheet = true }
+            )
         }
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
                     showBottomSheet = false
                 },
+                Modifier.heightIn(min = 500.dp, max = 500.dp),
+                containerColor = YellowMist,
+
                 sheetState = sheetState
             ) {
                 // Sheet content
-                Button(onClick = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
-                    }
-                }) {
-                    Text("Hide bottom sheet")
-                }
+                BottomSheet()
+
             }
         }
-
 
 
     }

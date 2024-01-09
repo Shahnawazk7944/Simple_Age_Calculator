@@ -26,6 +26,13 @@ val RootBeer = Color(0xFF2c1608)
 val DarkBrown = Color(0xFF1e0d07)
 val PaleYellow = Color(0xFFffffbf)
 val AzureMist = Color(0xFFf0ffff)
+val YellowMist = Color(0xFFFACEC3)
+
+//AgeCalculator Colors
 val PinkMain = Color(0xFFFFDAD7)
 val BlueMain = Color(0xFF151D4B)
 val PinkDark = Color(0xFFFA5257)
+val ChocoMain = Color(0xFF290000)
+val TextFieldColor = Color(0xFFF5EDE2)
+val MainButton = Color(0xFFEB6123)
+val ResetButton = Color(0xFFFADAC5)
