@@ -1,6 +1,7 @@
 package com.example.simple_age_calculator
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,15 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,21 +28,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
+import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.ChocoMain
 import com.example.simple_age_calculator.ui.theme.MainButton
 import com.example.simple_age_calculator.ui.theme.ResetButton
 import com.example.simple_age_calculator.ui.theme.TextFieldColor
 import com.example.simple_age_calculator.ui.theme.playFairFamily
+import com.example.simple_age_calculator.ui.theme.poppins
 
 @Composable
 fun BottomSheet() {
     Column(
         Modifier
             .fillMaxSize()
+            .background(BottomSheetColor)
             .padding(start = 25.dp, end = 25.dp, top = 10.dp, bottom = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
@@ -57,41 +58,44 @@ fun BottomSheet() {
             fontSize = 40.sp,
             color = BlueMain,
         )
-        Spacer(modifier = Modifier.height(20.dp))
 
+
+        //----------Birth Date
+        Spacer(modifier = Modifier.height(30.dp))
         Text(
             text = "Date Of Birth",
-            fontFamily = playFairFamily,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp,
+            fontFamily = poppins,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
             color = ChocoMain,
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(TextFieldColor)
-                .height(20.dp),
+                .height(50.dp)
+                .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
+                .clickable { },
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { },
+                    .padding(start = 15.dp, end = 7.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "23 - 08 - 2000",
-                    fontFamily = playFairFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
+                    fontFamily = poppins,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
                     color = Color.Gray,
                 )
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
-                        Modifier.size(15.dp)
+                        Modifier.size(25.dp)
                     )
 
                 }
@@ -99,41 +103,43 @@ fun BottomSheet() {
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
 
+        //----------Today's Date
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "Today's Date",
-            fontFamily = playFairFamily,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp,
+            fontFamily = poppins,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
             color = ChocoMain,
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(TextFieldColor)
-                .height(20.dp),
+                .height(50.dp)
+                .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
+                .clickable { },
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { },
+                    .padding(start = 15.dp, end = 7.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "DD - MM - YYYY",
-                    fontFamily = playFairFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
+                    fontFamily = poppins,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
                     color = Color.Gray,
                 )
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
-                        Modifier.size(15.dp)
+                        Modifier.size(25.dp)
                     )
 
                 }
@@ -143,16 +149,17 @@ fun BottomSheet() {
 
 
         //-------- CALCULATE BUTTON
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = {  },
+            onClick = { },
             modifier = Modifier
                 // .height(60.dp)
                 //.width(220.dp)
-                .fillMaxWidth().height(20.dp),
+                .fillMaxWidth()
+                .height(50.dp),
             colors = ButtonDefaults.buttonColors(MainButton),
-            shape = ShapeDefaults.Small
-        ){
+            shape = ShapeDefaults.Medium
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -160,54 +167,62 @@ fun BottomSheet() {
                 Text(
                     text = "Calculate",
                     fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = playFairFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
                     //style = MaterialTheme.typography.titleSmall,
                     color = AzureMist,
-                    fontSize = 12.sp
+                    fontSize = 16.sp
                 )
-                Spacer(modifier = Modifier.width(5.dp))
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = null,
-                    tint = AzureMist
-                )
+//                Spacer(modifier = Modifier.width(5.dp))
+//                Icon(
+//                    imageVector = Icons.Default.ArrowForward,
+//                    contentDescription = null,
+//                    tint = AzureMist
+//                )
             }
         }
 
         //------- RESET BUTTON
         Spacer(modifier = Modifier.height(10.dp))
         Button(
-            onClick = {  },
+            onClick = { },
             modifier = Modifier
                 // .height(60.dp)
                 //.width(220.dp)
-                .fillMaxWidth().height(20.dp),
+                .fillMaxWidth()
+                .height(50.dp),
             colors = ButtonDefaults.buttonColors(ResetButton),
-            shape = ShapeDefaults.Small
-        ){
+            shape = ShapeDefaults.Medium
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "RESET",
+                    text = "Reset",
                     fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = playFairFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
                     //style = MaterialTheme.typography.titleSmall,
-                    color = AzureMist,
-                    fontSize = 12.sp
+                    color = MainButton,
+                    fontSize = 16.sp
                 )
-                Spacer(modifier = Modifier.width(5.dp))
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = null,
-                    tint = AzureMist
-                )
+//                Spacer(modifier = Modifier.width(5.dp))
+//                Icon(
+//                    imageVector = Icons.Default.ArrowForward,
+//                    contentDescription = null,
+//                    tint = AzureMist
+//                )
             }
         }
 
 
+      //  Spacer(modifier = Modifier.height(40.dp))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewBotoomSheet() {
+    BottomSheet()
 }
