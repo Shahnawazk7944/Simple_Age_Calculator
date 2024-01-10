@@ -30,10 +30,11 @@ import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.PinkDark
 import com.example.simple_age_calculator.ui.theme.playFairFamily
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onNavigateToResult: ()->Unit) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -96,7 +97,14 @@ fun HomeScreen() {
                 sheetState = sheetState
             ) {
                 // Sheet content
-                BottomSheet()
+                BottomSheet(onNavigateToResult){
+                    scope.launch { sheetState.hide() }
+                        .invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                }
 
             }
         }
@@ -104,8 +112,10 @@ fun HomeScreen() {
 
     }
 }
+
+
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview(){
-    HomeScreen()
+    HomeScreen(({}))
 }

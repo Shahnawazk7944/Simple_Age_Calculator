@@ -22,10 +22,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +48,7 @@ import com.example.simple_age_calculator.ui.theme.ResetButton
 import com.example.simple_age_calculator.ui.theme.TextFieldColor
 import com.example.simple_age_calculator.ui.theme.playFairFamily
 import com.example.simple_age_calculator.ui.theme.poppins
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -53,7 +56,10 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet() {
+fun BottomSheet(onNavigateToResult: ()-> Unit, hideSheet:()->Unit) {
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
     var isBirthDatePickerOpen by rememberSaveable {
         mutableStateOf(false)
     }
@@ -181,7 +187,10 @@ fun BottomSheet() {
         //-------- CALCULATE BUTTON
         Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = { },
+            onClick = {
+                onNavigateToResult()
+                hideSheet()
+                },
             modifier = Modifier
                 // .height(60.dp)
                 //.width(220.dp)
@@ -288,5 +297,5 @@ fun Long?.changeMillisToDateString(): String {
 @Preview(showBackground = true)
 @Composable
 fun PreviewBotoomSheet() {
-    BottomSheet()
+    BottomSheet(onNavigateToResult = {}, hideSheet = {})
 }
