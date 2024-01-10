@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,7 +30,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -56,18 +54,18 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet() {
-    var isDatePickerOpen by rememberSaveable {
+    var isBirthDatePickerOpen by rememberSaveable {
         mutableStateOf(false)
     }
     var isTodayDatePickerOpen by rememberSaveable {
         mutableStateOf(false)
     }
-    var datePickerState = rememberDatePickerState(
+    var birthDatePickerState = rememberDatePickerState(
     )
     var todayDatePickerState = rememberDatePickerState(
         //initialSelectedDateMillis = Instant.now().toEpochMilli()
     )
-    var datePlaceHolder by remember {
+    var birthDatePlaceHolder by remember {
         mutableStateOf("DD - MM - YYYY")
     }
     var todayDatePlaceHolder by remember {
@@ -106,7 +104,7 @@ fun BottomSheet() {
                 .height(50.dp)
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
                 .clickable {
-                    isDatePickerOpen = true
+                    isBirthDatePickerOpen = true
                 },
         ) {
             Row(
@@ -117,13 +115,13 @@ fun BottomSheet() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = datePlaceHolder,
+                    text = birthDatePlaceHolder,
                     fontFamily = poppins,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
                     color = Color.Gray,
                 )
-                IconButton(onClick = { isDatePickerOpen = true }) {
+                IconButton(onClick = { isBirthDatePickerOpen = true }) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
                         contentDescription = "cal",
@@ -218,7 +216,7 @@ fun BottomSheet() {
         Spacer(modifier = Modifier.height(10.dp))
         Button(
             onClick = {
-                datePlaceHolder = "DD - MM - YYYY"
+                birthDatePlaceHolder = "DD - MM - YYYY"
                 todayDatePlaceHolder = "DD - MM - YYYY"
             },
             modifier = Modifier
@@ -254,13 +252,14 @@ fun BottomSheet() {
 
         //  Spacer(modifier = Modifier.height(40.dp))
     }
+    // Call to Material Date Picker
     SelectDate(
-        state = datePickerState,
-        isOpen = isDatePickerOpen,
-        onDismiss = { isDatePickerOpen = false },
+        state = birthDatePickerState,
+        isOpen = isBirthDatePickerOpen,
+        onDismiss = { isBirthDatePickerOpen = false },
         onConfirm = {
-            isDatePickerOpen = false
-            datePlaceHolder = datePickerState.selectedDateMillis.changeMillisToDateString()
+            isBirthDatePickerOpen = false
+            birthDatePlaceHolder = birthDatePickerState.selectedDateMillis.changeMillisToDateString()
         }
     )
     SelectDate(
@@ -269,7 +268,7 @@ fun BottomSheet() {
         onDismiss = { isTodayDatePickerOpen = false },
         onConfirm = {
             isTodayDatePickerOpen = false
-            todayDatePlaceHolder = datePickerState.selectedDateMillis.changeMillisToDateString()
+            todayDatePlaceHolder = birthDatePickerState.selectedDateMillis.changeMillisToDateString()
         }
     )
 }
