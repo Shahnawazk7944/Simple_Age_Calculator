@@ -1,15 +1,16 @@
 package com.example.simple_age_calculator
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -110,6 +111,184 @@ fun CalculateAge() {
                 verticalArrangement = Arrangement.Top
             ){
 
+                //----- 1st Row
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)
+                    ,
+                    verticalAlignment = Alignment.Top,
+                    //horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = "Date Of Birth",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Text(
+                        text = "23/08/2000",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Divider(thickness = 0.2.dp)
+                //----- 2nd Row
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)
+                    ,
+                    verticalAlignment = Alignment.Top,
+                    //horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = "Date Of Birth",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Text(
+                        text = "23/08/2000",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Divider(thickness = 0.2.dp)
+                //----- 3rd Row
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)
+                    ,
+                    verticalAlignment = Alignment.Top,
+                    //horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = "Date Of Birth",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Text(
+                        text = "23/08/2000",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Divider(thickness = 0.2.dp)
+                //----- 4th Row
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)
+                    ,
+                    verticalAlignment = Alignment.Top,
+                    //horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = "Date Of Birth",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Text(
+                        text = "23/08/2000",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Divider(thickness = 0.2.dp)
+                // ----- 5th Row
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)
+                    ,
+                    verticalAlignment = Alignment.Top,
+                    //horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = "Date Of Birth",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Text(
+                        text = "23/08/2000",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Divider(thickness = 0.2.dp)
+                // ----- 6th Row
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)
+                    ,
+                    verticalAlignment = Alignment.Top,
+                    //horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = "Date Of Birth",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Text(
+                        text = "23/08/2000",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        color = MainButton,
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
 
