@@ -11,9 +11,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,10 +37,11 @@ import com.example.simple_age_calculator.ui.theme.poppins
 import com.gandiva.neumorphic.LightSource
 import com.gandiva.neumorphic.neu
 import com.gandiva.neumorphic.shape.Flat
+import com.gandiva.neumorphic.shape.Oval
 import com.gandiva.neumorphic.shape.RoundedCorner
 
 @Composable
-fun CalculateAge() {
+fun CalculateAge(onNavigateToHome: () -> Unit) {
     val titleColor = Color.Gray
     val headColor = BlueMain
     Column(
@@ -47,15 +54,43 @@ fun CalculateAge() {
     ) {
 
         //--------------- RESULT Heading
-        Text(
-            text = "Results",
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Medium,
-            fontFamily = poppins,
-            //style = MaterialTheme.typography.titleSmall,
-            color = headColor,
-            fontSize = 25.sp
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+
+        ) {
+            IconButton(
+                onClick = { onNavigateToHome()},
+                modifier = Modifier
+                    .weight(2f).padding(horizontal = 20.dp)
+                    .neu(
+                        lightShadowColor = BottomSheetColor,
+                        darkShadowColor = Color.LightGray,
+                        shadowElevation = 8.dp,
+                        lightSource = LightSource.LEFT_TOP,
+                        shape = Flat(Oval),
+                    ),
+                //elevation = CardDefaults.cardElevation(10.dp),
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = AzureMist
+                ),
+
+            ) {
+                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = null, tint = headColor)
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                modifier = Modifier.weight(6f),
+                text = "Results",
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Medium,
+                fontFamily = poppins,
+                //style = MaterialTheme.typography.titleSmall,
+                color = headColor,
+                fontSize = 25.sp
+            )
+        }
 
 
         //--------------- YOUR AGE BOX
@@ -324,5 +359,5 @@ fun CalculateAge() {
 @Preview(showBackground = true)
 @Composable
 fun CalculateAgePreview() {
-    CalculateAge()
+    CalculateAge(onNavigateToHome = {})
 }

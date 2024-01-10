@@ -8,11 +8,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.simple_age_calculator.models.NavGraph
 import com.example.simple_age_calculator.ui.theme.AzureMist
-import com.example.simple_age_calculator.ui.theme.PinkMain
 import com.example.simple_age_calculator.ui.theme.Simple_Age_CalculatorTheme
 
 class MainActivity : ComponentActivity() {
+    lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,7 +26,9 @@ class MainActivity : ComponentActivity() {
                     color = AzureMist
                     //color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen()
+                    navController = rememberNavController()
+                    NavGraph(navController =navController)
+                    //HomeScreen(onNavigateToResult = {})
                 }
             }
         }
@@ -39,6 +44,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     Simple_Age_CalculatorTheme {
-        HomeScreen()
+        HomeScreen(onNavigateToResult = {})
     }
 }
