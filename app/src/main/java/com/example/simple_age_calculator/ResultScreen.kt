@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,16 +25,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simple_age_calculator.ui.theme.AzureMist
-import com.example.simple_age_calculator.ui.theme.ChocolateBrown
-import com.example.simple_age_calculator.ui.theme.MainButton
+import com.example.simple_age_calculator.ui.theme.BlueMain
+import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.poppins
+import com.gandiva.neumorphic.LightSource
+import com.gandiva.neumorphic.neu
+import com.gandiva.neumorphic.shape.Flat
+import com.gandiva.neumorphic.shape.RoundedCorner
 
 @Composable
 fun CalculateAge() {
+    val titleColor = Color.Gray
+    val headColor = BlueMain
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(AzureMist)
+            .background(BottomSheetColor)
             .padding(start = 10.dp, end = 10.dp, top = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -44,19 +53,28 @@ fun CalculateAge() {
             fontWeight = FontWeight.Medium,
             fontFamily = poppins,
             //style = MaterialTheme.typography.titleSmall,
-            color = ChocolateBrown,
+            color = headColor,
             fontSize = 25.sp
         )
 
 
         //--------------- YOUR AGE BOX
         Spacer(modifier = Modifier.height(60.dp))
-        Box(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(AzureMist)
                 .height(100.dp)
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 20.dp)
+                .neu(
+                    lightShadowColor = BottomSheetColor,
+                    darkShadowColor = Color.LightGray,
+                    shadowElevation = 10.dp,
+                    lightSource = LightSource.LEFT_TOP,
+                    shape = Flat(RoundedCorner(20.dp)),
+                ),
+            elevation = CardDefaults.cardElevation(10.dp),
+            colors = CardDefaults.cardColors(containerColor = AzureMist),
+            shape = RoundedCornerShape(20.dp),
 
             ) {
             Column(
@@ -69,9 +87,9 @@ fun CalculateAge() {
                     fontStyle = FontStyle.Normal,
                     fontWeight = FontWeight.Medium,
                     fontFamily = poppins,
-                    color = MainButton,
+                    color = titleColor,
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 5.dp, start = 5.dp)
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp)
                 )
 
                 //--------------- AGE BOX
@@ -84,7 +102,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Bold,
                         fontFamily = poppins,
-                        color = Color.Gray,
+                        color = headColor,
                         fontSize = 20.sp,
                         modifier = Modifier.align(Alignment.Center)
                     )
@@ -97,35 +115,45 @@ fun CalculateAge() {
 
         //--------------- More Details
         Spacer(modifier = Modifier.height(40.dp))
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp)
-            .background(AzureMist)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(300.dp)
+                .neu(
+                    lightShadowColor = BottomSheetColor,
+                    darkShadowColor = Color.LightGray,
+                    shadowElevation = 15.dp,
+                    lightSource = LightSource.LEFT_TOP,
+                    shape = Flat(RoundedCorner(24.dp)),
+                ),
+            elevation = CardDefaults.cardElevation(10.dp),
+            colors = CardDefaults.cardColors(containerColor = AzureMist),
+            shape = RoundedCornerShape(24.dp),
 
-        ){
-            Column (
+            ) {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = 10.dp),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
-            ){
+            ) {
 
                 //----- 1st Row
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 10.dp)
-                    ,
+                        .padding(all = 10.dp),
                     verticalAlignment = Alignment.Top,
                     //horizontalArrangement = Arrangement.Start
-                ){
+                ) {
                     Text(
                         text = "Date Of Birth",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = titleColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(2f)
                     )
@@ -134,7 +162,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = headColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
@@ -142,20 +170,19 @@ fun CalculateAge() {
 
                 Divider(thickness = 0.2.dp)
                 //----- 2nd Row
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 10.dp)
-                    ,
+                        .padding(all = 10.dp),
                     verticalAlignment = Alignment.Top,
                     //horizontalArrangement = Arrangement.Start
-                ){
+                ) {
                     Text(
-                        text = "Date Of Birth",
+                        text = "Today's Date",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = titleColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(2f)
                     )
@@ -164,7 +191,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = headColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
@@ -172,20 +199,19 @@ fun CalculateAge() {
 
                 Divider(thickness = 0.2.dp)
                 //----- 3rd Row
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 10.dp)
-                    ,
+                        .padding(all = 10.dp),
                     verticalAlignment = Alignment.Top,
                     //horizontalArrangement = Arrangement.Start
-                ){
+                ) {
                     Text(
-                        text = "Date Of Birth",
+                        text = "Born On",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = titleColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(2f)
                     )
@@ -194,7 +220,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = headColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
@@ -202,20 +228,19 @@ fun CalculateAge() {
 
                 Divider(thickness = 0.2.dp)
                 //----- 4th Row
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 10.dp)
-                    ,
+                        .padding(all = 10.dp),
                     verticalAlignment = Alignment.Top,
                     //horizontalArrangement = Arrangement.Start
-                ){
+                ) {
                     Text(
-                        text = "Date Of Birth",
+                        text = "Total Months",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = titleColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(2f)
                     )
@@ -224,7 +249,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = headColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
@@ -232,20 +257,19 @@ fun CalculateAge() {
 
                 Divider(thickness = 0.2.dp)
                 // ----- 5th Row
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 10.dp)
-                    ,
+                        .padding(all = 10.dp),
                     verticalAlignment = Alignment.Top,
                     //horizontalArrangement = Arrangement.Start
-                ){
+                ) {
                     Text(
-                        text = "Date Of Birth",
+                        text = "Total Weeks",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = titleColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(2f)
                     )
@@ -254,7 +278,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = headColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
@@ -262,20 +286,19 @@ fun CalculateAge() {
 
                 Divider(thickness = 0.2.dp)
                 // ----- 6th Row
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 10.dp)
-                    ,
+                        .padding(all = 10.dp),
                     verticalAlignment = Alignment.Top,
                     //horizontalArrangement = Arrangement.Start
-                ){
+                ) {
                     Text(
-                        text = "Date Of Birth",
+                        text = "Total Days",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = titleColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(2f)
                     )
@@ -284,7 +307,7 @@ fun CalculateAge() {
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
-                        color = MainButton,
+                        color = headColor,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
