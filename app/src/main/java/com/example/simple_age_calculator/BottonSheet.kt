@@ -193,37 +193,33 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {
-//                val dob = birthDatePickerState.selectedDateMillis
-//                val tDate = todayDatePickerState.selectedDateMillis
-//                Log.d(
-//                    "dob :- ",
-//                    "${dob.changeMillisToDateString()} + ${tDate.changeMillisToDateString()}"
-//                )
-                if (birthDatePickerState.selectedDateMillis != null && todayDatePickerState.selectedDateMillis != null) {
-                    val dob = LocalDate.ofEpochDay(birthDatePickerState.selectedDateMillis!! / 86400000)
-                    val tdate = LocalDate.ofEpochDay(todayDatePickerState.selectedDateMillis!!)
-                    val period = Period.between(dob, tdate)
+                val dob = birthDatePickerState.selectedDateMillis
+                val tDate = todayDatePickerState.selectedDateMillis
+                if (dob == null || tDate == null) {
+                    Log.d("not working","found null")
+                }else{
+                    val dBirth = LocalDate.ofEpochDay(dob / 86400000)
+                    val tdate = LocalDate.ofEpochDay(tDate / 86400000)
+                    val period = Period.between(dBirth, tdate)
                     val ageYears = period.years // Number of years elapsed
                     val ageMonths = period.months // Number of months elapsed (excluding years)
                     val ageDays = period.days // Number of days elapsed (excluding months and years)
                     // Calculate the total days, weeks, months since birth and Born On
-                    val bornOn = dob.dayOfWeek.name
+                    val bornOn = dBirth.dayOfWeek.name
                     val totalDays =
                         period.toTotalMonths() * 30.4375.toInt() // Approximate average month length
                     val totalWeeks = totalDays / 7
                     val totalMonths = period.toTotalMonths()
-                    Log.d("hope working","$ageYears $ageMonths $ageDays $bornOn $totalDays $totalWeeks $totalMonths")
+                    //Log.d("hope working","$ageYears $ageMonths $ageDays $bornOn $totalDays $totalWeeks $totalMonths")
                     navController.navigate(
                         route =Screen.Result.passAgeData(
                             dob = birthDatePickerState.selectedDateMillis.changeMillisToDateString(),
                             todayDate =  todayDatePickerState.selectedDateMillis.changeMillisToDateString(),
 //                            ageYears = ageYears, ageMonths = ageMonths, ageDays = ageDays, bornOn = bornOn,
 //                            totalDays = totalDays, totalWeeks = totalWeeks, totalMonths = totalMonths
-                            )
+                        )
                     )
                     hideSheet()
-                }else{
-                    Log.d("not working","found null")
                 }
 
 
