@@ -171,7 +171,7 @@ fun CalculateAge(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .height(350.dp)
+                .height(300.dp)
                 .neu(
                     lightShadowColor = BottomSheetColor,
                     darkShadowColor = Color.LightGray,

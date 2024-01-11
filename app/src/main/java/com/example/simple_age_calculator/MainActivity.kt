@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.simple_age_calculator.models.SetupNavGraph
 import com.example.simple_age_calculator.ui.theme.AzureMist
+import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.Simple_Age_CalculatorTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = AzureMist
+                    color = BottomSheetColor
                     //color = MaterialTheme.colorScheme.background
                 ) {
                     navController = rememberNavController()
