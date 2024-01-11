@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.simple_age_calculator.models.NavGraph
+import com.example.simple_age_calculator.models.SetupNavGraph
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.Simple_Age_CalculatorTheme
 
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     //color = MaterialTheme.colorScheme.background
                 ) {
                     navController = rememberNavController()
-                    NavGraph(navController =navController)
+                    SetupNavGraph(navController = navController)
                     //HomeScreen(onNavigateToResult = {})
                 }
             }
@@ -44,6 +44,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     Simple_Age_CalculatorTheme {
-        HomeScreen(onNavigateToResult = {})
+        HomeScreen(navController = rememberNavController())
     }
 }
