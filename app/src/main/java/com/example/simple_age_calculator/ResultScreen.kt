@@ -46,13 +46,13 @@ fun CalculateAge(
     navController: NavController,
     dob: String,
     todayDate: String,
-//    ageYears: String,
-//    ageMonths: String,
-//    ageDays: String,
-//    bornOn: String,
-//    totalDays: String,
-//    totalWeeks: String,
-//    totalMonths: String,
+    ageYears: String,
+    ageMonths: String,
+    ageDays: String,
+    bornOn: String,
+    totalDays: String,
+    totalWeeks: String,
+    totalMonths: String,
 ) {
     val titleColor = Color.Gray
     val headColor = BlueMain
@@ -150,7 +150,7 @@ fun CalculateAge(
                         .fillMaxSize()
                 ) {
                     Text(
-                        text = "ageYears Years  ageMonths Months  ageDays Days",
+                        text = "$ageYears Years  $ageMonths Months  $ageDays Days",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Bold,
                         fontFamily = poppins,
@@ -171,7 +171,7 @@ fun CalculateAge(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .height(300.dp)
+                .height(350.dp)
                 .neu(
                     lightShadowColor = BottomSheetColor,
                     darkShadowColor = Color.LightGray,
@@ -268,7 +268,7 @@ fun CalculateAge(
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "bornOn",
+                        text = bornOn,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -297,7 +297,7 @@ fun CalculateAge(
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "totalMonths",
+                        text = totalMonths,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -326,7 +326,7 @@ fun CalculateAge(
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "totalWeeks",
+                        text = totalWeeks,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -355,7 +355,7 @@ fun CalculateAge(
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "totalDays",
+                        text = totalDays,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -378,12 +378,12 @@ fun CalculateAge(
 fun CalculateAgePreview() {
     CalculateAge(
         navController = rememberNavController(), "", "",
-//        "",
-//        "",
-//        "",
-//        "",
-//        "",
-//        "",
-//        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
     )
 }
