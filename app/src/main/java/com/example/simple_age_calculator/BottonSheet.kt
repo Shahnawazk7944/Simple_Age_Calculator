@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -77,10 +78,10 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
         //initialSelectedDateMillis = Instant.now().toEpochMilli()
     )
     var birthDatePlaceHolder by remember {
-        mutableStateOf("DD - MM - YYYY")
+        mutableStateOf("DD-MM-YYYY")
     }
     var todayDatePlaceHolder by remember {
-        mutableStateOf("DD - MM - YYYY")
+        mutableStateOf("DD-MM-YYYY")
     }
     Column(
         Modifier
@@ -292,7 +293,8 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
         }
 
 
-        //  Spacer(modifier = Modifier.height(40.dp))
+//          Spacer(modifier = Modifier.height(60.dp))
+//            Divider(thickness = 5.dp)
     }
     // Call to Material Date Picker
     SelectDate(
@@ -325,7 +327,7 @@ fun Long?.changeMillisToDateString(): String {
             .atZone(ZoneId.systemDefault())
             .toLocalDate()
     } ?: LocalDate.now()
-    return date.format(DateTimeFormatter.ofPattern("dd - MM - yyyy"))
+    return date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
 }
 
 

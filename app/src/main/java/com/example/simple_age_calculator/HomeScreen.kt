@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,12 +51,14 @@ fun HomeScreen(navController: NavController) {
         Image(
             painter = painterResource(id = R.drawable.think1),
             contentDescription = "thinking Age",
-            Modifier.size(300.dp)
+            Modifier
+                .size(300.dp)
+                .padding(bottom = 50.dp)
         )
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(bottom = 150.dp, start = 25.dp)
+                .padding(bottom = 200.dp, start = 25.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -92,10 +97,8 @@ fun HomeScreen(navController: NavController) {
                 onDismissRequest = {
                     showBottomSheet = false
                 },
-                Modifier
-                    .heightIn(min = 500.dp, max = 600.dp),
+                Modifier.heightIn(min = 520.dp, max = 520.dp),
                 containerColor = BottomSheetColor,
-
                 sheetState = sheetState
             ) {
                 // Sheet content
