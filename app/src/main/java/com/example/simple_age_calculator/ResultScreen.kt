@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -30,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -41,7 +42,18 @@ import com.gandiva.neumorphic.shape.Oval
 import com.gandiva.neumorphic.shape.RoundedCorner
 
 @Composable
-fun CalculateAge(onNavigateToHome: () -> Unit) {
+fun CalculateAge(
+    navController: NavController,
+    dob: String,
+    todayDate: String,
+//    ageYears: String,
+//    ageMonths: String,
+//    ageDays: String,
+//    bornOn: String,
+//    totalDays: String,
+//    totalWeeks: String,
+//    totalMonths: String,
+) {
     val titleColor = Color.Gray
     val headColor = BlueMain
     Column(
@@ -61,9 +73,10 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
 
         ) {
             IconButton(
-                onClick = { onNavigateToHome()},
+                onClick = { navController.popBackStack() },
                 modifier = Modifier
-                    .weight(2f).padding(horizontal = 20.dp)
+                    .weight(2f)
+                    .padding(horizontal = 20.dp)
                     .neu(
                         lightShadowColor = BottomSheetColor,
                         darkShadowColor = Color.LightGray,
@@ -76,8 +89,12 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                     containerColor = AzureMist
                 ),
 
-            ) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = null, tint = headColor)
+                ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = null,
+                    tint = headColor
+                )
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -133,7 +150,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         .fillMaxSize()
                 ) {
                     Text(
-                        text = "24 Years  08 Months  15 Days",
+                        text = "ageYears Years  ageMonths Months  ageDays Days",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Bold,
                         fontFamily = poppins,
@@ -193,7 +210,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "23/08/2000",
+                        text = dob,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -222,7 +239,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "23/08/2000",
+                        text = todayDate,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -251,7 +268,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "23/08/2000",
+                        text = "bornOn",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -280,7 +297,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "23/08/2000",
+                        text = "totalMonths",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -309,7 +326,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "23/08/2000",
+                        text = "totalWeeks",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -338,7 +355,7 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "23/08/2000",
+                        text = "totalDays",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
@@ -359,5 +376,14 @@ fun CalculateAge(onNavigateToHome: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun CalculateAgePreview() {
-    CalculateAge(onNavigateToHome = {})
+    CalculateAge(
+        navController = rememberNavController(), "", "",
+//        "",
+//        "",
+//        "",
+//        "",
+//        "",
+//        "",
+//        "",
+    )
 }

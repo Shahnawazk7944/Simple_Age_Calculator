@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.PinkDark
@@ -34,7 +36,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onNavigateToResult: ()->Unit) {
+fun HomeScreen(navController: NavController) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -97,7 +99,7 @@ fun HomeScreen(onNavigateToResult: ()->Unit) {
                 sheetState = sheetState
             ) {
                 // Sheet content
-                BottomSheet(onNavigateToResult){
+                BottomSheet(navController= navController){
                     scope.launch { sheetState.hide() }
                         .invokeOnCompletion {
                             if (!sheetState.isVisible) {
@@ -117,5 +119,5 @@ fun HomeScreen(onNavigateToResult: ()->Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview(){
-    HomeScreen(({}))
+    HomeScreen(navController = rememberNavController())
 }

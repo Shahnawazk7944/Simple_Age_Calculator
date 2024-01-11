@@ -1,5 +1,6 @@
 package com.example.simple_age_calculator
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,6 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.simple_age_calculator.models.Screen
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -51,12 +55,13 @@ import com.example.simple_age_calculator.ui.theme.poppins
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
+import java.time.Period
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet(onNavigateToResult: ()-> Unit, hideSheet:()->Unit) {
+fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -188,9 +193,41 @@ fun BottomSheet(onNavigateToResult: ()-> Unit, hideSheet:()->Unit) {
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {
-                onNavigateToResult()
-                hideSheet()
-                },
+//                val dob = birthDatePickerState.selectedDateMillis
+//                val tDate = todayDatePickerState.selectedDateMillis
+//                Log.d(
+//                    "dob :- ",
+//                    "${dob.changeMillisToDateString()} + ${tDate.changeMillisToDateString()}"
+//                )
+                if (birthDatePickerState.selectedDateMillis != null && todayDatePickerState.selectedDateMillis != null) {
+                    val dob = LocalDate.ofEpochDay(birthDatePickerState.selectedDateMillis!! / 86400000)
+                    val tdate = LocalDate.ofEpochDay(todayDatePickerState.selectedDateMillis!!)
+                    val period = Period.between(dob, tdate)
+                    val ageYears = period.years // Number of years elapsed
+                    val ageMonths = period.months // Number of months elapsed (excluding years)
+                    val ageDays = period.days // Number of days elapsed (excluding months and years)
+                    // Calculate the total days, weeks, months since birth and Born On
+                    val bornOn = dob.dayOfWeek.name
+                    val totalDays =
+                        period.toTotalMonths() * 30.4375.toInt() // Approximate average month length
+                    val totalWeeks = totalDays / 7
+                    val totalMonths = period.toTotalMonths()
+                    Log.d("hope working","$ageYears $ageMonths $ageDays $bornOn $totalDays $totalWeeks $totalMonths")
+                    navController.navigate(
+                        route =Screen.Result.passAgeData(
+                            dob = birthDatePickerState.selectedDateMillis.changeMillisToDateString(),
+                            todayDate =  todayDatePickerState.selectedDateMillis.changeMillisToDateString(),
+//                            ageYears = ageYears, ageMonths = ageMonths, ageDays = ageDays, bornOn = bornOn,
+//                            totalDays = totalDays, totalWeeks = totalWeeks, totalMonths = totalMonths
+                            )
+                    )
+                    hideSheet()
+                }else{
+                    Log.d("not working","found null")
+                }
+
+
+            },
             modifier = Modifier
                 // .height(60.dp)
                 //.width(220.dp)
@@ -268,7 +305,8 @@ fun BottomSheet(onNavigateToResult: ()-> Unit, hideSheet:()->Unit) {
         onDismiss = { isBirthDatePickerOpen = false },
         onConfirm = {
             isBirthDatePickerOpen = false
-            birthDatePlaceHolder = birthDatePickerState.selectedDateMillis.changeMillisToDateString()
+            birthDatePlaceHolder =
+                birthDatePickerState.selectedDateMillis.changeMillisToDateString()
         }
     )
     SelectDate(
@@ -277,7 +315,8 @@ fun BottomSheet(onNavigateToResult: ()-> Unit, hideSheet:()->Unit) {
         onDismiss = { isTodayDatePickerOpen = false },
         onConfirm = {
             isTodayDatePickerOpen = false
-            todayDatePlaceHolder = birthDatePickerState.selectedDateMillis.changeMillisToDateString()
+            todayDatePlaceHolder =
+                birthDatePickerState.selectedDateMillis.changeMillisToDateString()
         }
     )
 }
@@ -297,5 +336,5 @@ fun Long?.changeMillisToDateString(): String {
 @Preview(showBackground = true)
 @Composable
 fun PreviewBotoomSheet() {
-    BottomSheet(onNavigateToResult = {}, hideSheet = {})
+    BottomSheet(navController = rememberNavController(), hideSheet = {})
 }
