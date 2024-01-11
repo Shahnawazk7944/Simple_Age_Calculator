@@ -215,8 +215,8 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
                         route =Screen.Result.passAgeData(
                             dob = birthDatePickerState.selectedDateMillis.changeMillisToDateString(),
                             todayDate =  todayDatePickerState.selectedDateMillis.changeMillisToDateString(),
-//                            ageYears = ageYears, ageMonths = ageMonths, ageDays = ageDays, bornOn = bornOn,
-//                            totalDays = totalDays, totalWeeks = totalWeeks, totalMonths = totalMonths
+                            ageYears = ageYears, ageMonths = ageMonths, ageDays = ageDays, bornOn = bornOn,
+                            totalDays = totalDays, totalWeeks = totalWeeks, totalMonths = totalMonths
                         )
                     )
                     hideSheet()
@@ -312,7 +312,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
         onConfirm = {
             isTodayDatePickerOpen = false
             todayDatePlaceHolder =
-                birthDatePickerState.selectedDateMillis.changeMillisToDateString()
+                todayDatePickerState.selectedDateMillis.changeMillisToDateString()
         }
     )
 }
