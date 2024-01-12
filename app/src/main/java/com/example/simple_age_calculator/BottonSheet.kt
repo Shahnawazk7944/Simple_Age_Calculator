@@ -22,6 +22,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -65,6 +67,9 @@ import java.time.format.DateTimeFormatter
 fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
+    val snackBarState = remember {
+        SnackbarHostState()
+    }
     var showBottomSheet by remember { mutableStateOf(false) }
     var isBirthDatePickerOpen by rememberSaveable {
         mutableStateOf(false)
@@ -198,6 +203,14 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
                 val tDate = todayDatePickerState.selectedDateMillis
                 if (dob == null || tDate == null) {
                     Log.d("not working","found null")
+                    scope.launch {
+                        snackBarState.showSnackbar(
+                            message = "Both dates are required",
+                            actionLabel = "Retry",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                    Log.d("not working","found null after")
                 }else{
                     val dBirth = LocalDate.ofEpochDay(dob / 86400000)
                     val tdate = LocalDate.ofEpochDay(tDate / 86400000)
