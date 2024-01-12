@@ -94,12 +94,13 @@ fun HomeScreen(navController: NavController) {
         }
         if (showBottomSheet) {
             ModalBottomSheet(
+
                 onDismissRequest = {
                     showBottomSheet = false
                 },
                 Modifier.heightIn(min = 520.dp, max = 520.dp),
                 containerColor = BottomSheetColor,
-                sheetState = sheetState
+                sheetState = sheetState,
             ) {
                 // Sheet content
                 BottomSheet(navController= navController){

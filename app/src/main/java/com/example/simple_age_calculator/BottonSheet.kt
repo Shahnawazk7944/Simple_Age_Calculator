@@ -1,5 +1,6 @@
 package com.example.simple_age_calculator
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -27,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,6 +52,7 @@ import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.ChocoMain
 import com.example.simple_age_calculator.ui.theme.MainButton
+import com.example.simple_age_calculator.ui.theme.PinkDark
 import com.example.simple_age_calculator.ui.theme.ResetButton
 import com.example.simple_age_calculator.ui.theme.TextFieldColor
 import com.example.simple_age_calculator.ui.theme.playFairFamily
@@ -67,7 +71,13 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
     val snackBarState = remember {
         SnackbarHostState()
     }
-    SnackbarHost(hostState = snackBarState)
+    SnackbarHost(hostState = snackBarState){
+        Snackbar(
+            snackbarData = it,
+            containerColor = BlueMain,
+            contentColor = PinkDark,
+        )
+    }
     var showBottomSheet by remember { mutableStateOf(false) }
     var isBirthDatePickerOpen by rememberSaveable {
         mutableStateOf(false)
@@ -80,6 +90,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
     var todayDatePickerState = rememberDatePickerState(
         //initialSelectedDateMillis = Instant.now().toEpochMilli()
     )
+
     var birthDatePlaceHolder by remember {
         mutableStateOf("DD-MM-YYYY")
     }
@@ -203,7 +214,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
 
                     dob == null && tDate != null -> scope.launch {
                         snackBarState.showSnackbar(
-                            message = "Please enter Date of birth",
+                            message = "Please enter Date of birth.",
                             actionLabel = "Retry",
                             duration = SnackbarDuration.Short
                         )
@@ -211,7 +222,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
 
                     tDate == null && dob != null -> scope.launch {
                         snackBarState.showSnackbar(
-                            message = "Please enter Today's Date",
+                            message = "Please enter Today's Date.",
                             actionLabel = "Retry",
                             duration = SnackbarDuration.Short
                         )
@@ -219,7 +230,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
 
                     dob == null && tDate == null -> scope.launch {
                         snackBarState.showSnackbar(
-                            message = "Both dates are required",
+                            message = "Both dates are required.",
                             actionLabel = "Retry",
                             duration = SnackbarDuration.Short
                         )
@@ -259,7 +270,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
                         } else {
                             scope.launch {
                                 snackBarState.showSnackbar(
-                                    message = "Today's date cannot be earlier than the birth date.",
+                                    message = "Today's date can't be before birth date.",
                                     actionLabel = "Retry",
                                     duration = SnackbarDuration.Short
                                 )
@@ -303,8 +314,10 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
         Spacer(modifier = Modifier.height(10.dp))
         Button(
             onClick = {
-                birthDatePlaceHolder = "DD - MM - YYYY"
-                todayDatePlaceHolder = "DD - MM - YYYY"
+                todayDatePickerState.setSelection(null)
+                birthDatePickerState.setSelection(null)
+                birthDatePlaceHolder = "DD-MM-YYYY"
+                todayDatePlaceHolder = "DD-MM-YYYY"
             },
             modifier = Modifier
                 // .height(60.dp)
@@ -349,6 +362,7 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
             isBirthDatePickerOpen = false
             birthDatePlaceHolder =
                 birthDatePickerState.selectedDateMillis.changeMillisToDateString()
+
         }
     )
     SelectDate(
