@@ -1,6 +1,5 @@
 package com.example.simple_age_calculator
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,16 +16,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,11 +63,11 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
-    val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     val snackBarState = remember {
         SnackbarHostState()
     }
+    SnackbarHost(hostState = snackBarState)
     var showBottomSheet by remember { mutableStateOf(false) }
     var isBirthDatePickerOpen by rememberSaveable {
         mutableStateOf(false)
@@ -201,41 +199,61 @@ fun BottomSheet(navController: NavController, hideSheet: () -> Unit) {
             onClick = {
                 val dob = birthDatePickerState.selectedDateMillis
                 val tDate = todayDatePickerState.selectedDateMillis
-                if (dob == null || tDate == null) {
-                    Log.d("not working","found null")
-                    scope.launch {
+                when {
+
+                    dob == null -> scope.launch {
+                        snackBarState.showSnackbar(
+                            message = "Please enter Date of birth",
+                            actionLabel = "Retry",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    tDate == null -> scope.launch {
+                        snackBarState.showSnackbar(
+                            message = "Please enter Today's Date",
+                            actionLabel = "Retry",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                    dob == null && tDate == null -> scope.launch {
                         snackBarState.showSnackbar(
                             message = "Both dates are required",
                             actionLabel = "Retry",
                             duration = SnackbarDuration.Short
                         )
                     }
-                    Log.d("not working","found null after")
-                }else{
-                    val dBirth = LocalDate.ofEpochDay(dob / 86400000)
-                    val tdate = LocalDate.ofEpochDay(tDate / 86400000)
-                    val period = Period.between(dBirth, tdate)
-                    val ageYears = period.years // Number of years elapsed
-                    val ageMonths = period.months // Number of months elapsed (excluding years)
-                    val ageDays = period.days // Number of days elapsed (excluding months and years)
-                    // Calculate the total days, weeks, months since birth and Born On
-                    val bornOn = dBirth.dayOfWeek.name
-                    val totalDays =
-                        period.toTotalMonths() * 30.4375.toInt() // Approximate average month length
-                    val totalWeeks = totalDays / 7
-                    val totalMonths = period.toTotalMonths()
-                    //Log.d("hope working","$ageYears $ageMonths $ageDays $bornOn $totalDays $totalWeeks $totalMonths")
-                    navController.navigate(
-                        route =Screen.Result.passAgeData(
-                            dob = birthDatePickerState.selectedDateMillis.changeMillisToDateString(),
-                            todayDate =  todayDatePickerState.selectedDateMillis.changeMillisToDateString(),
-                            ageYears = ageYears, ageMonths = ageMonths, ageDays = ageDays, bornOn = bornOn,
-                            totalDays = totalDays, totalWeeks = totalWeeks, totalMonths = totalMonths
+                    else -> {
+                        val dBirth = LocalDate.ofEpochDay(dob / 86400000)
+                        val tdate = LocalDate.ofEpochDay(tDate / 86400000)
+                        val period = Period.between(dBirth, tdate)
+                        val ageYears = period.years // Number of years elapsed
+                        val ageMonths = period.months // Number of months elapsed (excluding years)
+                        val ageDays =
+                            period.days // Number of days elapsed (excluding months and years)
+                        // Calculate the total days, weeks, months since birth and Born On
+                        val bornOn = dBirth.dayOfWeek.name
+                        val totalDays =
+                            period.toTotalMonths() * 30.4375.toInt() // Approximate average month length
+                        val totalWeeks = totalDays / 7
+                        val totalMonths = period.toTotalMonths()
+                        //Log.d("hope working","$ageYears $ageMonths $ageDays $bornOn $totalDays $totalWeeks $totalMonths")
+                        navController.navigate(
+                            route = Screen.Result.passAgeData(
+                                dob = birthDatePickerState.selectedDateMillis.changeMillisToDateString(),
+                                todayDate = todayDatePickerState.selectedDateMillis.changeMillisToDateString(),
+                                ageYears = ageYears,
+                                ageMonths = ageMonths,
+                                ageDays = ageDays,
+                                bornOn = bornOn,
+                                totalDays = totalDays,
+                                totalWeeks = totalWeeks,
+                                totalMonths = totalMonths
+                            )
                         )
-                    )
-                    hideSheet()
+                        hideSheet()
+                    }
                 }
-
 
             },
             modifier = Modifier
