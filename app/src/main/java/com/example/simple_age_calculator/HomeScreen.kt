@@ -44,7 +44,7 @@ fun HomeScreen(navController: NavController) {
         skipPartiallyExpanded = true
     )
     // skipPartiallyExpanded = true for opening bottom sheet
-    // state at fixed sized 
+    // state at fixed sized
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
