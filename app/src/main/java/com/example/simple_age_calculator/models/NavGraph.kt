@@ -1,6 +1,5 @@
 package com.example.simple_age_calculator.models
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
