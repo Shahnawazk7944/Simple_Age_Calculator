@@ -10,20 +10,32 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ShapeDefaults
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,16 +46,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.simple_age_calculator.models.Screen
+import com.example.simple_age_calculator.ui.SaveDatesBottomSheet
+import com.example.simple_age_calculator.ui.changeMillisToDateString
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
+import com.example.simple_age_calculator.ui.theme.MainButton
+import com.example.simple_age_calculator.ui.theme.ResetButton
 import com.example.simple_age_calculator.ui.theme.poppins
 import com.gandiva.neumorphic.LightSource
 import com.gandiva.neumorphic.neu
 import com.gandiva.neumorphic.shape.Flat
 import com.gandiva.neumorphic.shape.Oval
 import com.gandiva.neumorphic.shape.RoundedCorner
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculateAge(
     navController: NavController,
@@ -57,6 +78,13 @@ fun CalculateAge(
     totalWeeks: String,
     totalMonths: String,
 ) {
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    // skipPartiallyExpanded = true for opening bottom sheet
+    // state at fixed sized
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
     val titleColor = Color.Gray
     val headColor = BlueMain
     Column(
@@ -131,7 +159,8 @@ fun CalculateAge(
             colors = CardDefaults.cardColors(containerColor = AzureMist),
             shape = RoundedCornerShape(20.dp),
 
-            ) {
+            )
+        {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
@@ -370,9 +399,92 @@ fun CalculateAge(
             }
         }
 
+        Box (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+        ){
+            Button(
+                onClick = {
+                    showBottomSheet = true
+                },
+                modifier = Modifier
+                    // .height(60.dp)
+                    //.width(220.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 30.dp)
+                    .height(50.dp)
+                    .neu(
+                        lightShadowColor = BottomSheetColor,
+                        darkShadowColor = Color.Gray,
+                        shadowElevation = 10.dp,
+                        lightSource = LightSource.LEFT_TOP,
+                        shape = Flat(RoundedCorner(12.dp)),
+                    ),
+                colors = ButtonDefaults.buttonColors(MainButton),
+                shape = ShapeDefaults.Medium
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Save Data",
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = poppins,
+                        //style = MaterialTheme.typography.titleSmall,
+                        color = AzureMist,
+                        fontSize = 16.sp
+                    )
+                    //                Spacer(modifier = Modifier.width(5.dp))
+                    //                Icon(
+                    //                    imageVector = Icons.Default.ArrowForward,
+                    //                    contentDescription = null,
+                    //                    tint = AzureMist
+                    //                )
+                }
+            }
+
+
+            if (showBottomSheet) {
+                ModalBottomSheet(
+
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    Modifier.heightIn(min = 520.dp, max = 520.dp),
+                    containerColor = BottomSheetColor,
+                    sheetState = sheetState,
+                ) {
+                    // Sheet content
+                    SaveDatesBottomSheet(
+                        navController = navController,
+                        dob = dob ,
+                        todayDate = todayDate,
+                        ageYears = ageYears,
+                        ageMonths = ageMonths,
+                        ageDays = ageDays,
+                        bornOn = bornOn,
+                        totalDays = totalDays,
+                        totalWeeks = totalWeeks,
+                        totalMonths = totalMonths,
+                    ){
+                        scope.launch { sheetState.hide() }
+                            .invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                    }
+
+                }
+            }
+        }
+        
 
     }
-
 
 }
 
