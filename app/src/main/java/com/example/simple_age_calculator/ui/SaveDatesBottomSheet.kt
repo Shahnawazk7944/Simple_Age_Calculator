@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -29,6 +30,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -152,22 +155,36 @@ fun SaveDatesBottomSheet(
                 .background(TextFieldColor)
                 .height(50.dp)
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(12.dp))
-                .clickable {
-                    isBirthDatePickerOpen = true
-                },
         ) {
 
-           TextField(
-               value = nameState,
-               onValueChange = {
-               nameState = it
-           },
-               modifier = Modifier
-                   .fillMaxSize()
-                   .background(TextFieldColor) ,
-               shape = RoundedCornerShape(12.dp),
 
-           )
+            OutlinedTextField(
+                value = nameState,
+                onValueChange = {
+                    nameState = it
+                },
+                modifier = Modifier
+                    //.background(TextFieldColor)
+                    .fillMaxSize(),
+                placeholder = {
+                    Text(
+                        "Enter your name",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontFamily = poppins,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp
+                    )
+                },
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = TextFieldColor,
+                    unfocusedContainerColor = TextFieldColor,
+                    //cursorColor = Color.Green,
+                )
+
+
+            )
         }
 
         Spacer(modifier = Modifier.height(30.dp))
