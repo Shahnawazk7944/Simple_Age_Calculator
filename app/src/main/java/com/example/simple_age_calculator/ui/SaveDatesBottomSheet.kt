@@ -1,8 +1,8 @@
 package com.example.simple_age_calculator.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,15 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Snackbar
@@ -28,21 +25,18 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -51,9 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.simple_age_calculator.R
-import com.example.simple_age_calculator.SelectDate
-import com.example.simple_age_calculator.models.Screen
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -71,7 +62,6 @@ import com.gandiva.neumorphic.shape.RoundedCorner
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
-import java.time.Period
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -104,25 +94,8 @@ fun SaveDatesBottomSheet(
             contentColor = PinkDark,
         )
     }
+    val context = LocalContext.current
     var showBottomSheet by remember { mutableStateOf(false) }
-    var isBirthDatePickerOpen by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var isTodayDatePickerOpen by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var birthDatePickerState = rememberDatePickerState(
-    )
-    var todayDatePickerState = rememberDatePickerState(
-        //initialSelectedDateMillis = Instant.now().toEpochMilli()
-    )
-
-    var birthDatePlaceHolder by remember {
-        mutableStateOf("DD-MM-YYYY")
-    }
-    var todayDatePlaceHolder by remember {
-        mutableStateOf("DD-MM-YYYY")
-    }
     Column(
         Modifier
             .fillMaxSize()
@@ -163,10 +136,12 @@ fun SaveDatesBottomSheet(
                 onValueChange = {
                     nameState = it
                 },
+                textStyle = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp),
                 modifier = Modifier
                     //.background(TextFieldColor)
                     .fillMaxSize(),
                 placeholder = {
+                    //Modifier.fillMaxSize()
                     Text(
                         "Enter your name",
                         textAlign = TextAlign.Center,
@@ -180,6 +155,7 @@ fun SaveDatesBottomSheet(
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = TextFieldColor,
                     unfocusedContainerColor = TextFieldColor,
+                    focusedTextColor = ChocoMain
                     //cursorColor = Color.Green,
                 )
 
@@ -245,74 +221,21 @@ fun SaveDatesBottomSheet(
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {
-                val dob = birthDatePickerState.selectedDateMillis
-                val tDate = todayDatePickerState.selectedDateMillis
-                when {
-
-                    dob == null && tDate != null -> scope.launch {
+                if (nameState.isNotEmpty()) {
+                    //navController.navigate()
+                    Toast.makeText(
+                        context,
+                        "Data saved successfully",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                } else {
+                    scope.launch {
                         snackBarState.showSnackbar(
-                            message = "Please enter Date of birth.",
+                            message = "Please enter your name",
                             actionLabel = "Retry",
                             duration = SnackbarDuration.Short
                         )
-                    }
-
-                    tDate == null && dob != null -> scope.launch {
-                        snackBarState.showSnackbar(
-                            message = "Please enter Today's Date.",
-                            actionLabel = "Retry",
-                            duration = SnackbarDuration.Short
-                        )
-                    }
-
-                    dob == null && tDate == null -> scope.launch {
-                        snackBarState.showSnackbar(
-                            message = "Both dates are required.",
-                            actionLabel = "Retry",
-                            duration = SnackbarDuration.Short
-                        )
-                    }
-
-                    dob != null && tDate != null -> {
-                        val dBirth = LocalDate.ofEpochDay(dob / 86400000)
-                        val tdate = LocalDate.ofEpochDay(tDate / 86400000)
-                        if (tDate > dob) {
-                            val period = Period.between(dBirth, tdate)
-                            val ageYears = period.years // Number of years elapsed
-                            val ageMonths =
-                                period.months // Number of months elapsed (excluding years)
-                            val ageDays =
-                                period.days // Number of days elapsed (excluding months and years)
-                            // Calculate the total days, weeks, months since birth and Born On
-                            val bornOn = dBirth.dayOfWeek.name
-                            val totalDays =
-                                period.toTotalMonths() * 30.4375.toInt() // Approximate average month length
-                            val totalWeeks = totalDays / 7
-                            val totalMonths = period.toTotalMonths()
-                            //Log.d("hope working","$ageYears $ageMonths $ageDays $bornOn $totalDays $totalWeeks $totalMonths")
-                            navController.navigate(
-                                route = Screen.Result.passAgeData(
-                                    dob = birthDatePickerState.selectedDateMillis.changeMillisToDateString(),
-                                    todayDate = todayDatePickerState.selectedDateMillis.changeMillisToDateString(),
-                                    ageYears = ageYears,
-                                    ageMonths = ageMonths,
-                                    ageDays = ageDays,
-                                    bornOn = bornOn,
-                                    totalDays = totalDays,
-                                    totalWeeks = totalWeeks,
-                                    totalMonths = totalMonths
-                                )
-                            )
-                            hideSheet()
-                        } else {
-                            scope.launch {
-                                snackBarState.showSnackbar(
-                                    message = "Today's date can't be before birth date.",
-                                    actionLabel = "Retry",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        }
                     }
                 }
 
@@ -330,7 +253,7 @@ fun SaveDatesBottomSheet(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Calculate",
+                    text = "Save Data",
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Medium,
                     fontFamily = poppins,
@@ -351,10 +274,13 @@ fun SaveDatesBottomSheet(
         Spacer(modifier = Modifier.height(10.dp))
         Button(
             onClick = {
-                todayDatePickerState.setSelection(null)
-                birthDatePickerState.setSelection(null)
-                birthDatePlaceHolder = "DD-MM-YYYY"
-                todayDatePlaceHolder = "DD-MM-YYYY"
+                hideSheet()
+                Toast.makeText(
+                    context,
+                    "Closed",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
             },
             modifier = Modifier
                 // .height(60.dp)
@@ -369,7 +295,7 @@ fun SaveDatesBottomSheet(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Reset",
+                    text = "Close",
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Medium,
                     fontFamily = poppins,
@@ -390,28 +316,6 @@ fun SaveDatesBottomSheet(
 //          Spacer(modifier = Modifier.height(60.dp))
 //            Divider(thickness = 5.dp)
     }
-    // Call to Material Date Picker
-    SelectDate(
-        state = birthDatePickerState,
-        isOpen = isBirthDatePickerOpen,
-        onDismiss = { isBirthDatePickerOpen = false },
-        onConfirm = {
-            isBirthDatePickerOpen = false
-            birthDatePlaceHolder =
-                birthDatePickerState.selectedDateMillis.changeMillisToDateString()
-
-        }
-    )
-    SelectDate(
-        state = todayDatePickerState,
-        isOpen = isTodayDatePickerOpen,
-        onDismiss = { isTodayDatePickerOpen = false },
-        onConfirm = {
-            isTodayDatePickerOpen = false
-            todayDatePlaceHolder =
-                todayDatePickerState.selectedDateMillis.changeMillisToDateString()
-        }
-    )
 }
 
 //Extension function for to convert milli to String
@@ -442,4 +346,6 @@ fun PreviewBotoomSheet() {
         dob = "",
         bornOn = ""
     )
+
 }
+
