@@ -1,7 +1,6 @@
 package com.example.simple_age_calculator
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,8 +25,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ShapeDefaults
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -46,14 +43,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.simple_age_calculator.models.Screen
-import com.example.simple_age_calculator.ui.SaveDatesBottomSheet
-import com.example.simple_age_calculator.ui.changeMillisToDateString
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.MainButton
-import com.example.simple_age_calculator.ui.theme.ResetButton
 import com.example.simple_age_calculator.ui.theme.poppins
 import com.gandiva.neumorphic.LightSource
 import com.gandiva.neumorphic.neu
@@ -61,8 +54,6 @@ import com.gandiva.neumorphic.shape.Flat
 import com.gandiva.neumorphic.shape.Oval
 import com.gandiva.neumorphic.shape.RoundedCorner
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.Period
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -399,11 +390,11 @@ fun CalculateAge(
             }
         }
 
-        Box (
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp)
-        ){
+        ) {
             Button(
                 onClick = {
                     showBottomSheet = true
@@ -461,7 +452,7 @@ fun CalculateAge(
                     // Sheet content
                     SaveDatesBottomSheet(
                         navController = navController,
-                        dob = dob ,
+                        dob = dob,
                         todayDate = todayDate,
                         ageYears = ageYears,
                         ageMonths = ageMonths,
@@ -470,7 +461,7 @@ fun CalculateAge(
                         totalDays = totalDays,
                         totalWeeks = totalWeeks,
                         totalMonths = totalMonths,
-                    ){
+                    ) {
                         scope.launch { sheetState.hide() }
                             .invokeOnCompletion {
                                 if (!sheetState.isVisible) {
@@ -482,7 +473,7 @@ fun CalculateAge(
                 }
             }
         }
-        
+
 
     }
 

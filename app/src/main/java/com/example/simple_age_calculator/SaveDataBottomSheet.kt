@@ -1,4 +1,4 @@
-package com.example.simple_age_calculator.ui
+package com.example.simple_age_calculator
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -60,10 +60,6 @@ import com.gandiva.neumorphic.neu
 import com.gandiva.neumorphic.shape.Flat
 import com.gandiva.neumorphic.shape.RoundedCorner
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -223,12 +219,13 @@ fun SaveDatesBottomSheet(
             onClick = {
                 if (nameState.isNotEmpty()) {
                     //navController.navigate()
+                    hideSheet()
                     Toast.makeText(
                         context,
                         "Data saved successfully",
                         Toast.LENGTH_LONG
-                    )
-                        .show()
+                    ).show()
+
                 } else {
                     scope.launch {
                         snackBarState.showSnackbar(
@@ -319,20 +316,12 @@ fun SaveDatesBottomSheet(
 }
 
 //Extension function for to convert milli to String
-fun Long?.changeMillisToDateString(): String {
-    val date: LocalDate = this?.let {
-        Instant
-            .ofEpochMilli(it)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-    } ?: LocalDate.now()
-    return date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-}
+
 
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewBotoomSheet() {
+fun PreviewSavedDataBottomSheet() {
     SaveDatesBottomSheet(
         navController = rememberNavController(),
         hideSheet = {},
