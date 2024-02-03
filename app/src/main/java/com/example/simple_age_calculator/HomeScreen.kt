@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.simple_age_calculator.models.Screen
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -76,12 +77,15 @@ fun HomeScreen(navController: NavController) {
                 .align(Alignment.TopCenter)
                 .padding(horizontal = 20.dp)
                 .padding(top = 30.dp)
+
         ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-
+                    .clickable {
+                        navController.navigate(route = Screen.SavedData.route)
+                    }
                     .neu(
                         lightShadowColor = BottomSheetColor,
                         darkShadowColor = Color.LightGray,

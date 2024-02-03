@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.simple_age_calculator.CalculateAge
 import com.example.simple_age_calculator.HomeScreen
+import com.example.simple_age_calculator.SavedDataScreen
 
 @Composable
 fun SetupNavGraph(
@@ -20,7 +21,9 @@ fun SetupNavGraph(
         composable(route = Screen.Home.route) {
             HomeScreen(navController = navController)
         }
-
+        composable(route = Screen.SavedData.route) {
+            SavedDataScreen(navController = navController)
+        }
         composable(
             route = Screen.Result.route,
             arguments = listOf(
