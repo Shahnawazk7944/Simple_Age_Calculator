@@ -1,5 +1,9 @@
 package com.example.simple_age_calculator
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material3.Card
@@ -24,8 +29,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -111,6 +122,10 @@ fun SaveDataItems(
 ) {
     val titleColor = Color.Gray
     val headColor = BlueMain
+    var cardState by remember {
+        mutableStateOf(false)
+    }
+    val rotateState by animateFloatAsState(targetValue = if (cardState) 180f else 0f)
     //Spacer(modifier = Modifier.height(60.dp))
 //    Card(
 //        modifier = Modifier
@@ -137,30 +152,31 @@ fun SaveDataItems(
 
     //--------------- More Details
     //Spacer(modifier = Modifier.height(40.dp))
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .height(400.dp)
-            .neu(
-                lightShadowColor = BottomSheetColor,
-                darkShadowColor = Color.LightGray,
-                shadowElevation = 15.dp,
-                lightSource = LightSource.LEFT_TOP,
-                shape = Flat(RoundedCorner(24.dp)),
-            ),
-        elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(containerColor = AzureMist),
-        shape = RoundedCornerShape(24.dp),
-
-        ) {
-        Column(
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 10.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
-        ) {
+                .fillMaxWidth()
+                .animateContentSize(
+                    animationSpec = tween(
+                        durationMillis = 300, easing = LinearOutSlowInEasing
+                    )
+                )
+                .padding(horizontal = 20.dp)
+                //.height(400.dp)
+                .neu(
+                    lightShadowColor = BottomSheetColor,
+                    darkShadowColor = Color.LightGray,
+                    shadowElevation = 15.dp,
+                    lightSource = LightSource.LEFT_TOP,
+                    shape = Flat(RoundedCorner(24.dp)),
+                ),
+            elevation = CardDefaults.cardElevation(10.dp),
+            colors = CardDefaults.cardColors(containerColor = AzureMist),
+            shape = RoundedCornerShape(24.dp),
+
+            ) {
             Column(
                 //modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
@@ -168,32 +184,51 @@ fun SaveDataItems(
             ) {
 
                 //----Name
-//                Text(
-//                    text = "Name :",
-//                    fontStyle = FontStyle.Normal,
-//                    fontWeight = FontWeight.Medium,
-//                    fontFamily = poppins,
-//                    color = titleColor,
-//                    fontSize = 16.sp,
-//                    modifier = Modifier.padding(top = 10.dp, start = 10.dp)
-//                )
+                //                Text(
+                //                    text = "Name :",
+                //                    fontStyle = FontStyle.Normal,
+                //                    fontWeight = FontWeight.Medium,
+                //                    fontFamily = poppins,
+                //                    color = titleColor,
+                //                    fontSize = 16.sp,
+                //                    modifier = Modifier.padding(top = 10.dp, start = 10.dp)
+                //                )
 
-                //--------------- AGE BOX
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp)
-                ) {
-                    Text(
-                        text = state.savedData[index].name,
-                        fontStyle = FontStyle.Normal,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = poppins,
-                        color = headColor,
-                        fontSize = 20.sp,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+                //---------------Name Box
+
+                Row {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp)
+                            .weight(2f)
+                    ) {
+                        Text(
+                            text = state.savedData[index].name,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 20.sp,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+
+                        IconButton(
+                            onClick = { cardState = !cardState },
+                            modifier = Modifier
+                                .alpha(5f)
+                                .rotate(rotateState),
+                        ) {
+
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown,
+                                contentDescription = "dropDownIcon"
+                            )
+                        }
+                    }
                 }
+
+
 
 
                 Text(
@@ -221,191 +256,200 @@ fun SaveDataItems(
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
+                if (cardState) {
 
-            }
 
+                    //----- 1st Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp),
+                        verticalAlignment = Alignment.Top,
+                        //horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Date Of Birth",
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = titleColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = state.savedData[index].dob,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            //----- 1st Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),
-                verticalAlignment = Alignment.Top,
-                //horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Date Of Birth",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = titleColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(2f)
-                )
-                Text(
-                    text = state.savedData[index].dob,
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = headColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+                    Divider(thickness = 0.2.dp)
+                    //----- 2nd Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp),
+                        verticalAlignment = Alignment.Top,
+                        //horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Today's Date",
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = titleColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = state.savedData[index].todayDate,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            Divider(thickness = 0.2.dp)
-            //----- 2nd Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),
-                verticalAlignment = Alignment.Top,
-                //horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Today's Date",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = titleColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(2f)
-                )
-                Text(
-                    text = state.savedData[index].todayDate,
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = headColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+                    Divider(thickness = 0.2.dp)
+                    //----- 3rd Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp),
+                        verticalAlignment = Alignment.Top,
+                        //horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Born On",
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = titleColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = state.savedData[index].bornOn,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            Divider(thickness = 0.2.dp)
-            //----- 3rd Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),
-                verticalAlignment = Alignment.Top,
-                //horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Born On",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = titleColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(2f)
-                )
-                Text(
-                    text = state.savedData[index].bornOn,
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = headColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+                    Divider(thickness = 0.2.dp)
+                    //----- 4th Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp),
+                        verticalAlignment = Alignment.Top,
+                        //horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Total Months",
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = titleColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = state.savedData[index].totalMonths,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            Divider(thickness = 0.2.dp)
-            //----- 4th Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),
-                verticalAlignment = Alignment.Top,
-                //horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Total Months",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = titleColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(2f)
-                )
-                Text(
-                    text = state.savedData[index].totalMonths,
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = headColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+                    Divider(thickness = 0.2.dp)
+                    // ----- 5th Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp),
+                        verticalAlignment = Alignment.Top,
+                        //horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Total Weeks",
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = titleColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = state.savedData[index].totalWeeks,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            Divider(thickness = 0.2.dp)
-            // ----- 5th Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),
-                verticalAlignment = Alignment.Top,
-                //horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Total Weeks",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = titleColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(2f)
-                )
-                Text(
-                    text = state.savedData[index].totalWeeks,
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = headColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Divider(thickness = 0.2.dp)
-            // ----- 6th Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),
-                verticalAlignment = Alignment.Top,
-                //horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Total Days",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = titleColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(2f)
-                )
-                Text(
-                    text = state.savedData[index].totalDays,
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = poppins,
-                    color = headColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(.6f)
-                )
-                IconButton(onClick = { onEvent(SaveDataEvent.DeleteSavedData(state.savedData[index])) }) {
-                    Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete Icon",
-                    modifier = Modifier.size(25.dp).weight(1f),
-                        tint = PinkDark
-                    )
+                    Divider(thickness = 0.2.dp)
+                    // ----- 6th Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp),
+                        verticalAlignment = Alignment.Top,
+                        //horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Total Days",
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = titleColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = state.savedData[index].totalDays,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = poppins,
+                            color = headColor,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(.6f)
+                        )
+                        IconButton(onClick = { onEvent(SaveDataEvent.DeleteSavedData(state.savedData[index])) }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = "Delete Icon",
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .weight(1f),
+                                tint = PinkDark
+                            )
+                        }
+                    }
                 }
+
             }
+
+
         }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)
