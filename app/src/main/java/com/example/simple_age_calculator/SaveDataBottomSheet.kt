@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataEvent
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataState
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -74,6 +76,8 @@ fun SaveDatesBottomSheet(
     totalDays: String,
     totalWeeks: String,
     totalMonths: String,
+    state: SaveDataState,
+    onEvent: (SaveDataEvent) -> Unit,
     hideSheet: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -130,6 +134,7 @@ fun SaveDatesBottomSheet(
             OutlinedTextField(
                 value = nameState,
                 onValueChange = {
+                    state.name.value = it
                     nameState = it
                 },
                 textStyle = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp),
@@ -218,7 +223,30 @@ fun SaveDatesBottomSheet(
         Button(
             onClick = {
                 if (nameState.isNotEmpty()) {
-                    //navController.navigate()
+                    state.dob.value = dob
+                    state.todayDate.value = todayDate
+                    state.ageYears.value = ageYears
+                    state.ageMonths.value = ageMonths
+                    state.ageDays.value = ageDays
+                    state.bornOn.value = bornOn
+                    state.totalDays.value = totalDays
+                    state.totalMonths.value = totalMonths
+                    state.totalWeeks.value = totalWeeks
+
+                    onEvent(SaveDataEvent.SaveData(
+                        name = state.name.value,
+                        dob = state.dob.value,
+                        todayDate = state.todayDate.value,
+                        ageYears = state.ageYears.value,
+                        ageMonths = state.ageMonths.value,
+                        ageDays = state.ageDays.value,
+                        bornOn = state.bornOn.value,
+                        totalDays = state.totalDays.value,
+                        totalWeeks = state.totalWeeks.value,
+                        totalMonths = state.totalMonths.value,
+                    ))
+
+
                     hideSheet()
                     Toast.makeText(
                         context,
@@ -272,12 +300,12 @@ fun SaveDatesBottomSheet(
         Button(
             onClick = {
                 hideSheet()
-                Toast.makeText(
-                    context,
-                    "Closed",
-                    Toast.LENGTH_LONG
-                )
-                    .show()
+//                Toast.makeText(
+//                    context,
+//                    "Closed",
+//                    Toast.LENGTH_LONG
+//                )
+//                    .show()
             },
             modifier = Modifier
                 // .height(60.dp)
@@ -318,7 +346,6 @@ fun SaveDatesBottomSheet(
 //Extension function for to convert milli to String
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewSavedDataBottomSheet() {
@@ -333,7 +360,9 @@ fun PreviewSavedDataBottomSheet() {
         todayDate = "",
         totalDays = "",
         dob = "",
-        bornOn = ""
+        bornOn = "",
+        state = SaveDataState(),
+        onEvent = {}
     )
 
 }

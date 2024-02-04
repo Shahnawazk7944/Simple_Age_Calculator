@@ -14,7 +14,7 @@ interface SaveDataDao {
     @Delete
     suspend fun DeleteSavedData(saveData: SaveData)
 
-    @Query("SELECT * FROM savedata ORDER BY dateAdded")
+    @Query("SELECT * FROM savedata ORDER BY dateAdded DESC")
     fun getOrderByDateAdded(): Flow<List<SaveData>>
     @Query("SELECT * FROM savedata ORDER BY name ASC")
     fun getOrderByNameAdded(): Flow<List<SaveData>>
