@@ -1,21 +1,26 @@
 package com.example.simple_age_calculator
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,9 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataEvent
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataState
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -38,57 +46,365 @@ import com.gandiva.neumorphic.shape.RoundedCorner
 
 @Composable
 fun SavedDataScreen(
-    navController: NavController
+    navController: NavController,
+    state: SaveDataState,
+    onEvent: (SaveDataEvent) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-            .padding(top = 30.dp)
 
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-
-                .neu(
-                    lightShadowColor = BottomSheetColor,
-                    darkShadowColor = Color.LightGray,
-                    shadowElevation = 10.dp,
-                    lightSource = LightSource.LEFT_TOP,
-                    shape = Flat(RoundedCorner(20.dp)),
-                ),
-            elevation = CardDefaults.cardElevation(10.dp),
-            colors = CardDefaults.cardColors(containerColor = AzureMist),
-            shape = RoundedCornerShape(20.dp),
-
+    Scaffold(
+        topBar = {
+            Row(
+                modifier = Modifier
+                    //.fillMaxSize()
+                    .height(55.dp)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Your Saved Age Records",
-                        fontStyle = FontStyle.Normal,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = poppins,
-                        color = BlueMain,
-                        fontSize = 20.sp,
+                Text(
+                    text = "Your Saved Age Records",
+                    modifier = Modifier.weight(1f),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
 
-                        )
-                    Spacer(modifier = Modifier.width(5.dp))
+                IconButton(onClick = { onEvent(SaveDataEvent.SortSavedData) }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowForward,
-                        contentDescription = null,
-                        tint = BlueMain,
-                        modifier = Modifier.size(35.dp)
+                        imageVector = Icons.Rounded.Sort, contentDescription = "Sort Icon",
+                        modifier = Modifier.size(35.dp),
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
 
             }
+        },
+
+        )
+    { paddingValues ->
+
+        LazyColumn(
+
+            contentPadding = paddingValues,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            items(state.savedData.size) { index ->
+                SaveDataItems(state = state, index = index, onEvent = onEvent)
+            }
+
+        }
+
+    }
+}
+
+@Composable
+fun SaveDataItems(
+    state: SaveDataState,
+    index: Int,
+    onEvent: (SaveDataEvent) -> Unit
+) {
+    val titleColor = Color.Gray
+    val headColor = BlueMain
+    //Spacer(modifier = Modifier.height(60.dp))
+//    Card(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(100.dp)
+//            .padding(horizontal = 20.dp)
+//            .neu(
+//                lightShadowColor = BottomSheetColor,
+//                darkShadowColor = Color.LightGray,
+//                shadowElevation = 10.dp,
+//                lightSource = LightSource.LEFT_TOP,
+//                shape = Flat(RoundedCorner(20.dp)),
+//            ),
+//        elevation = CardDefaults.cardElevation(10.dp),
+//        colors = CardDefaults.cardColors(containerColor = AzureMist),
+//        shape = RoundedCornerShape(20.dp),
+//
+//        )
+//    {
+//
+//    }
+//    //----AGE BOX END
+
+
+    //--------------- More Details
+    //Spacer(modifier = Modifier.height(40.dp))
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .height(400.dp)
+            .neu(
+                lightShadowColor = BottomSheetColor,
+                darkShadowColor = Color.LightGray,
+                shadowElevation = 15.dp,
+                lightSource = LightSource.LEFT_TOP,
+                shape = Flat(RoundedCorner(24.dp)),
+            ),
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(containerColor = AzureMist),
+        shape = RoundedCornerShape(24.dp),
+
+        ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Column(
+                //modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+
+                //----Name
+//                Text(
+//                    text = "Name :",
+//                    fontStyle = FontStyle.Normal,
+//                    fontWeight = FontWeight.Medium,
+//                    fontFamily = poppins,
+//                    color = titleColor,
+//                    fontSize = 16.sp,
+//                    modifier = Modifier.padding(top = 10.dp, start = 10.dp)
+//                )
+
+                //--------------- AGE BOX
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
+                ) {
+                    Text(
+                        text = state.savedData[index].name,
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = poppins,
+                        color = headColor,
+                        fontSize = 20.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+
+                Text(
+                    text = "Your Age :",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp)
+                )
+
+                //--------------- AGE BOX
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "${state.savedData[index].ageYears} Years ${state.savedData[index].ageMonths} Months ${state.savedData[index].ageDays} Days",
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = poppins,
+                        color = headColor,
+                        fontSize = 20.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+            }
+
+
+            //----- 1st Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 10.dp),
+                verticalAlignment = Alignment.Top,
+                //horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Date Of Birth",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = state.savedData[index].dob,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = headColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Divider(thickness = 0.2.dp)
+            //----- 2nd Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 10.dp),
+                verticalAlignment = Alignment.Top,
+                //horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Today's Date",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = state.savedData[index].todayDate,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = headColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Divider(thickness = 0.2.dp)
+            //----- 3rd Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 10.dp),
+                verticalAlignment = Alignment.Top,
+                //horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Born On",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = state.savedData[index].bornOn,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = headColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Divider(thickness = 0.2.dp)
+            //----- 4th Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 10.dp),
+                verticalAlignment = Alignment.Top,
+                //horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Total Months",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = state.savedData[index].totalMonths,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = headColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Divider(thickness = 0.2.dp)
+            // ----- 5th Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 10.dp),
+                verticalAlignment = Alignment.Top,
+                //horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Total Weeks",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = state.savedData[index].totalWeeks,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = headColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Divider(thickness = 0.2.dp)
+            // ----- 6th Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 10.dp),
+                verticalAlignment = Alignment.Top,
+                //horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Total Days",
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = titleColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = state.savedData[index].totalDays,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = poppins,
+                    color = headColor,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ItemsPreview() {
+    SaveDataItems(
+        state = SaveDataState(),
+        index = 0,
+        onEvent = {},
+    )
 }

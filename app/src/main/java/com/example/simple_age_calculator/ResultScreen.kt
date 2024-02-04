@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataEvent
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataState
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
@@ -68,6 +70,8 @@ fun CalculateAge(
     totalDays: String,
     totalWeeks: String,
     totalMonths: String,
+    state: SaveDataState,
+    onEvent: (SaveDataEvent) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -461,6 +465,8 @@ fun CalculateAge(
                         totalDays = totalDays,
                         totalWeeks = totalWeeks,
                         totalMonths = totalMonths,
+                        state = state,
+                        onEvent = onEvent
                     ) {
                         scope.launch { sheetState.hide() }
                             .invokeOnCompletion {
@@ -491,5 +497,7 @@ fun CalculateAgePreview() {
         "",
         "",
         "",
+        state = SaveDataState(),
+        onEvent = {}
     )
 }

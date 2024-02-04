@@ -9,10 +9,14 @@ import androidx.navigation.navArgument
 import com.example.simple_age_calculator.CalculateAge
 import com.example.simple_age_calculator.HomeScreen
 import com.example.simple_age_calculator.SavedDataScreen
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataEvent
+import com.example.simple_age_calculator.models.SavedViewModal.SaveDataState
 
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    state: SaveDataState,
+    onEvent: (SaveDataEvent) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -22,7 +26,7 @@ fun SetupNavGraph(
             HomeScreen(navController = navController)
         }
         composable(route = Screen.SavedData.route) {
-            SavedDataScreen(navController = navController)
+            SavedDataScreen(navController = navController, state = state, onEvent = onEvent )
         }
         composable(
             route = Screen.Result.route,
@@ -97,7 +101,9 @@ fun SetupNavGraph(
                     bornOn = bornOn,
                     totalDays = totalDays,
                     totalWeeks = totalWeeks,
-                    totalMonths = totalMonths
+                    totalMonths = totalMonths,
+                    state = state,
+                    onEvent = onEvent
                 )
             }
         }
