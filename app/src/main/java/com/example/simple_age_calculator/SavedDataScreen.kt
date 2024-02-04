@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +38,7 @@ import com.example.simple_age_calculator.models.SavedViewModal.SaveDataState
 import com.example.simple_age_calculator.ui.theme.AzureMist
 import com.example.simple_age_calculator.ui.theme.BlueMain
 import com.example.simple_age_calculator.ui.theme.BottomSheetColor
+import com.example.simple_age_calculator.ui.theme.PinkDark
 import com.example.simple_age_calculator.ui.theme.poppins
 import com.gandiva.neumorphic.LightSource
 import com.gandiva.neumorphic.neu
@@ -392,8 +394,14 @@ fun SaveDataItems(
                     fontFamily = poppins,
                     color = headColor,
                     fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(.6f)
                 )
+                IconButton(onClick = { onEvent(SaveDataEvent.DeleteSavedData(state.savedData[index])) }) {
+                    Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete Icon",
+                    modifier = Modifier.size(25.dp).weight(1f),
+                        tint = PinkDark
+                    )
+                }
             }
         }
     }
