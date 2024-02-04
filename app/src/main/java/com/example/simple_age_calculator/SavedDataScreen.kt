@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +47,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,6 +62,8 @@ import com.example.simple_age_calculator.ui.theme.BottomSheetColor
 import com.example.simple_age_calculator.ui.theme.ChocoMain
 import com.example.simple_age_calculator.ui.theme.MainButton
 import com.example.simple_age_calculator.ui.theme.PinkDark
+import com.example.simple_age_calculator.ui.theme.PinkMain
+import com.example.simple_age_calculator.ui.theme.playFairFamily
 import com.example.simple_age_calculator.ui.theme.poppins
 import com.gandiva.neumorphic.LightSource
 import com.gandiva.neumorphic.neu
@@ -114,28 +118,54 @@ fun SavedDataScreen(
 
         )
     { paddingValues ->
-
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BottomSheetColor)
-            //.padding(vertical = 0.dp)
-        ) {
-            LazyColumn(
-
-                contentPadding = paddingValues,
+        if (state.savedData.isNotEmpty()) {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .background(BottomSheetColor)
+                //.padding(vertical = 0.dp)
             ) {
+                LazyColumn(
 
-                items(state.savedData.size) { index ->
-                    SaveDataItems(state = state, index = index, onEvent = onEvent)
+                    contentPadding = paddingValues,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    items(state.savedData.size) { index ->
+                        SaveDataItems(state = state, index = index, onEvent = onEvent)
+                    }
+
                 }
-
+            }
+        }else{
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BottomSheetColor)
+                //.padding(vertical = 0.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.empty_content),
+                    contentDescription = "thinking Age",
+                    Modifier
+                        .size(300.dp)
+                        .padding(bottom = 50.dp)
+                )
+                Text(
+                    text = "Oops! Looks like there's no data saved yet.",
+                    fontFamily = poppins,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = PinkDark,
+                    modifier = Modifier.padding(horizontal = 40.dp)
+                )
             }
         }
 
