@@ -17,11 +17,11 @@ This project builds a modern age calculator app utilizing Kotlin, Jetpack Compos
 
 ### Technical Details:
 
-- Programming Language: Kotlin
-- UI Framework: Jetpack Compose
-- Architecture: MVVM
-- Data Storage: Room Database
-- Additionals and Libraries: Jetpack Compose Navigation and Material Design
+- **Programming Language:** Kotlin
+- **UI Framework:** Jetpack Compose
+- **Architecture:** MVVM
+- **Data Storage:** Room Database
+- **Additionals and Libraries:** Jetpack Compose Navigation and Material Design
 
 ### Learning Points:
 
